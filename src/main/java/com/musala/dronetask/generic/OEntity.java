@@ -28,5 +28,17 @@ public abstract class OEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+//    @CreatedDate
+//    @Temporal(TemporalType.TIMESTAMP)
+//    @JsonFormat( shape = JsonFormat.Shape.STRING, timezone = "Africa/Cairo")
+//    @Column(name = "creation_date")
+//    private Date createdAt;
+
+    @LastModifiedDate
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat( shape = JsonFormat.Shape.STRING, timezone = "Africa/Cairo")
+    @Column(name = "last_update_date")
+    private Date updatedAt;
+
 
 }
