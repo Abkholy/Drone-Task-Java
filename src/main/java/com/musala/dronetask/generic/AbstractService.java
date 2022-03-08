@@ -1,6 +1,4 @@
-/*
- * Copyright (c) 2020. overrideeg.ocm.
- */
+
 
 package com.musala.dronetask.generic;
 
