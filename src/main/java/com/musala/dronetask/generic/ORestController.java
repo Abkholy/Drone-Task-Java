@@ -35,7 +35,7 @@ public abstract class ORestController<E extends OEntity> {
     }
 
     @PostMapping
-    public @ResponseBody E postOne(@RequestBody E req)  {
+    public @ResponseBody E postOne(@Valid @RequestBody E req)  {
         return mService.save(req);
     }
 

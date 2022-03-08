@@ -5,11 +5,10 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.musala.dronetask.generic.OEntity;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.envers.Audited;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 @Entity
 @JsonAutoDetect
@@ -17,8 +16,13 @@ import javax.persistence.EntityListeners;
 @Getter
 @Setter
 public class Medication extends OEntity {
+    @NotNull(message = "Name is required")
+    @Pattern(regexp = "^[a-zA-Z0-9_.-]*$",message = "Name allowed only letters, numbers, ‘-‘, ‘_’")
     private String name;
+    @NotNull(message = "Code is required")
+    @Pattern(regexp = "^[A-Z0-9_.]*$",message = "Code allowed only Upper Case letters, numbers, ‘_’")
     private String code;
+    @NotNull(message = "Weight is required")
     private Float weight;
     private String image;
 }

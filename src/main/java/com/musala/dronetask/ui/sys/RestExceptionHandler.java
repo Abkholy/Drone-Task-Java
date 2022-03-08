@@ -9,7 +9,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,11 +17,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import java.io.IOException;
+import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -39,6 +39,15 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ResponseStatus(UNAUTHORIZED)
     @ResponseBody
     public Object InvalidJwtAuthenticationException(InvalidJwtAuthenticationException ex) throws IOException {
+        ApiError apiError =
+                new ApiError(UNAUTHORIZED, ex.getLocalizedMessage(), Arrays.asList(ex.getMessage()),UNAUTHORIZED.value());
+        return  apiError;
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(UNAUTHORIZED)
+    @ResponseBody
+    public Object AccessDeniedException(AccessDeniedException ex) throws IOException {
         ApiError apiError =
                 new ApiError(UNAUTHORIZED, ex.getLocalizedMessage(), Arrays.asList(ex.getMessage()),UNAUTHORIZED.value());
         return  apiError;
@@ -64,7 +73,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-                List<String> errors = new ArrayList<>();
+        List<String> errors = new ArrayList<>();
         ex.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
             String errorMessage = error.getDefaultMessage();
@@ -82,8 +91,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ResponseStatus(UNAUTHORIZED)
     @ResponseBody
     public ApiError AuthenticationException(AuthenticationException ex) throws IOException {
-     ApiError apiError =
-             new ApiError(UNAUTHORIZED, ex.getLocalizedMessage(), Arrays.asList(ex.getMessage()),UNAUTHORIZED.value());
+        ApiError apiError =
+                new ApiError(UNAUTHORIZED, ex.getLocalizedMessage(), Arrays.asList(ex.getMessage()),UNAUTHORIZED.value());
         return  apiError;
     }
 
